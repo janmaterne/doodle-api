@@ -32,10 +32,12 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.materne.doodle.api.addon.CommentWithTimestamps;
 
+@Ignore // Survey was deleted for unknown reasons ...
 public class DoodleClientTest {
 	
 	/** 
