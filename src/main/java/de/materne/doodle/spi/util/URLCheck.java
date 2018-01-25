@@ -18,7 +18,12 @@
  */
 package de.materne.doodle.spi.util;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Locale;
+
+import org.apache.commons.io.IOUtils;
 
 import de.materne.doodle.api.DoodleException;
 
@@ -27,6 +32,7 @@ public class URLCheck {
 	public void check(String url) {
 		checkIsNotNull(url);
 		checkIsDoodle(url);
+		checkIsAvailable(url);
 	}
 
 	private void checkIsNotNull(String url) {
@@ -38,6 +44,19 @@ public class URLCheck {
 	private void checkIsDoodle(String url) {
 		if (!url.contains("http") || !url.toLowerCase(Locale.ENGLISH).contains("doodle.com")) {
 			throw new DoodleException("%s is not a Doodle URL", url);
+		}
+	}
+
+	private void checkIsAvailable(String url) {
+		InputStream in = null;
+		try {
+			URL internetUrl = new URL(url);
+			in = internetUrl.openStream();
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new DoodleException("%s is not available", url);
+		} finally {
+			IOUtils.closeQuietly(in);
 		}
 	}
 

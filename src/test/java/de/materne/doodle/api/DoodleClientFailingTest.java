@@ -44,8 +44,15 @@ public class DoodleClientFailingTest {
 	@Test
 	public void openNotExisting() {
 		exc.expect(DoodleException.class);
-		exc.expectMessage("does not seem to be a Doodle survey");
+		exc.expectMessage("is not available");
 		DoodleClient.create().open("https://doodle.com/poll/notExisting");
+	}
+	
+	@Test
+	public void openNotASurvey() {
+		exc.expect(DoodleException.class);
+		exc.expectMessage("does not seem to be a Doodle survey");
+		DoodleClient.create().open("https://doodle.com/de/impressum");
 	}
 	
 	@Test
