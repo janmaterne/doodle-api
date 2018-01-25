@@ -61,8 +61,9 @@ public class DateUtilTest {
 
 	@Test
 	public void germanWithoutYear() {
+		int currentYear = LocalDateTime.now().getYear();
 		DateTimeFormatter dtf = DateUtil.formatterWithDefaults("dd.MM.", LocalDateTime.now(), ChronoField.YEAR);
-		assertEquals(LocalDateTime.of(2017, 8, 1, 0, 0), DateUtil.parse("01.08.", dtf));
+		assertEquals(LocalDateTime.of(currentYear, 8, 1, 0, 0), DateUtil.parse("01.08.", dtf));
 	}
 	
 	@Test
