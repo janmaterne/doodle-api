@@ -21,6 +21,7 @@ package de.materne.doodle.spi.util;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
@@ -44,7 +45,7 @@ public class WebDriverUtil {
 			throw new DoodleException(errorMessageFormat, errorArgs);
 		}
 	}
-
+	
 	public void click(By selector) {
 		try {
 			driver.findElement(selector).click();
@@ -77,8 +78,22 @@ public class WebDriverUtil {
 		return getText(By.cssSelector(cssSelector));
 	}
 	
+	public Optional<WebElement> findElement(WebElement webElement, By selector) {
+		List<WebElement> list = webElement.findElements(selector);
+		return list.isEmpty() ? Optional.empty() : Optional.of(list.get(0));
+	}
+
 	public String getText(WebElement webElement, String cssSelector) {
-		return webElement.findElement(By.cssSelector(cssSelector)).getText();
+		return getText(webElement.findElement(By.cssSelector(cssSelector)));
+	}
+
+	public String getText(WebElement el) {
+		String txt = el.getText();
+		if (!StringUtils.isEmpty(txt)) {
+			return txt;
+		} else {
+			return getSource(el);
+		}
 	}
 	
 	public String getText(WebElement webElement, String cssSelector, String defaultText) {
@@ -86,7 +101,7 @@ public class WebDriverUtil {
 		if (list.isEmpty()) {
 			return defaultText;
 		} else {
-			return list.get(0).getText();
+			return getText(list.get(0), cssSelector);
 		}
 	}
 	

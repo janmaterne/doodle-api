@@ -109,10 +109,10 @@ public class DoodleClientImpl implements DoodleClient {
 	}
 
 	private void checkSurvey() {
-		String cssSelectorTable = "#d-participationTabSwitchView";
 		driverUtil.requireElement(
-			By.cssSelector(cssSelectorTable), 
-			"'%s' does not seem to be a Doodle survey", driver.getCurrentUrl()
+			By.id("d-app"),
+			"'%s' does not seem to be a Doodle survey", 
+			driver.getCurrentUrl()
 		);
 		// Close welcome message: "Willkommen zum neuen Doodle"
 		driverUtil.click(By.cssSelector(".d-continueButton"));

@@ -20,7 +20,7 @@ package de.materne.doodle.spi.drivers;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.FirefoxOptions;
 
 import de.materne.doodle.api.DoodleException;
 import de.materne.doodle.spi.WebDriverFactory;
@@ -30,8 +30,8 @@ public class FirefoxDriverFactory implements WebDriverFactory {
 	@Override
 	public WebDriver create() {
 		checkSystemProperties();
-		FirefoxProfile profile = createProfile();
-		return new FirefoxDriver(profile);
+		FirefoxOptions options = createFirefoxOptions();
+		return new FirefoxDriver(options);
 	}
 
 	private void checkSystemProperties() {
@@ -40,24 +40,23 @@ public class FirefoxDriverFactory implements WebDriverFactory {
 		}
 	}
 
-	private FirefoxProfile createProfile() {
-		FirefoxProfile profile = new FirefoxProfile();
+	private FirefoxOptions createFirefoxOptions() {
+		FirefoxOptions options = new FirefoxOptions();
 		// Disable CSS
-		profile.setPreference("permissions.default.stylesheet", 2); 
+		options.addPreference("permissions.default.stylesheet", 2); 
 		// Disable images
-		profile.setPreference("permissions.default.image", 2); 
+		options.addPreference("permissions.default.image", 2); 
 		// Disable Flash
-		profile.setPreference("dom.ipc.plugins.enabled.libflashplayer.so", false); 
+		options.addPreference("dom.ipc.plugins.enabled.libflashplayer.so", false); 
 		// Disable sound
-		profile.setPreference("media.volume_scale", "0.0");
+		options.addPreference("media.volume_scale", "0.0");
 
 		// http://stackoverflow.com/questions/33937067/firefox-webdriver-opens-first-run-page-all-the-time
-		profile.setPreference("browser.startup.homepage_override.mstone", "ignore");
-		profile.setPreference("startup.homepage_welcome_url.additional", "about:blank");
-		profile.setPreference("startup.homepage_welcome_url", "about:blank");
-		profile.setPreference("browser.startup.homepage", "about:blank");
-		
-		return profile;
+		options.addPreference("browser.startup.homepage_override.mstone", "ignore");
+		options.addPreference("startup.homepage_welcome_url.additional", "about:blank");
+		options.addPreference("startup.homepage_welcome_url", "about:blank");
+		options.addPreference("browser.startup.homepage", "about:blank");
+		return options;
 	}
-
+	
 }

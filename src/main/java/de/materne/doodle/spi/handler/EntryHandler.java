@@ -11,8 +11,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -34,13 +36,14 @@ public class EntryHandler {
 
 	public List<Entry> extractEntries() {
 		WebElement table = driver.findElement(By.cssSelector("div.d-expandableScrollContainer div.d-expandableScrollContentWrapper div.d-expandableScrollContent"));
-
+		
 		// Currently we have a table with data and a separate '<aside>' column with names.
 		List<String> names = extractNames(table);
 		Map<LocalDateTime, List<Choice>> data = extractChoices(table);
 		
 		// So we have to combine them.
-		return combine(names, data);
+		List<Entry> entries = combine(names, data);
+		return entries;
 	}
 
 	protected Map<LocalDateTime, List<Choice>> extractChoices(WebElement table) {
@@ -50,10 +53,10 @@ public class EntryHandler {
 			String day   = driverUtil.getText(we, ".d-date");
 			String time  = driverUtil.getText(we, ".d-time", "20:00"); 
 			LocalDateTime tstamp = createTStamp(month, day, time); 
-			List<Choice> choices = we.findElements(By.cssSelector(".d-preference div"))
+			List<Choice> choices = we.findElements(By.cssSelector(".d-preferences li"))
 				.stream()
 				.map( w -> w.getAttribute("class") )
-				.map( s -> s.replace("d-optionContainer", "") )
+				.map( s -> s.replace("d-preference", "") )
 				.map( s -> s.trim() )
 				.map( ChoiceFactory::getFor )
 				.collect(Collectors.toList());
@@ -61,12 +64,16 @@ public class EntryHandler {
 		}
 		return data;
 	}
-
+	
 	protected List<String> extractNames(WebElement table) {
 		List<String> names = table.findElements(By.className("d-participantInfo"))
 			.stream()
-			.map( we -> we.getText() )
-			.filter( s -> s != null && !s.isEmpty() )
+			.map( we -> driverUtil.findElement(we, By.className("d-text")) )
+			.filter(Optional::isPresent)
+			.map(Optional::get)
+			.map( we -> driverUtil.getText(we) )
+			.filter(StringUtils::isNotEmpty)
+			.map(String::trim)
 			.collect(Collectors.toList());
 		return names;
 	}
@@ -74,8 +81,9 @@ public class EntryHandler {
 	private List<Entry> combine(List<String> names, Map<LocalDateTime, List<Choice>> data) {
 		List<Entry> list = new LinkedList<>();
 		for(LocalDateTime ldt : data.keySet()) {
+			List<Choice> choices = data.get(ldt);
 			for(int i=0; i<names.size(); i++) {
-				list.add(new Entry(ldt, names.get(i), data.get(ldt).get(i)));
+				list.add(new Entry(ldt, names.get(i), choices.get(i)));
 			}
 		}
 		return list;

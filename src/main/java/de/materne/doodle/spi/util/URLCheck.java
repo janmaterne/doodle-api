@@ -32,7 +32,8 @@ public class URLCheck {
 	public void check(String url) {
 		checkIsNotNull(url);
 		checkIsDoodle(url);
-		checkIsAvailable(url);
+		// Gibt einen 407 'not available' bei direktem Zugriff ...
+//		checkIsAvailable(url);
 	}
 
 	private void checkIsNotNull(String url) {
