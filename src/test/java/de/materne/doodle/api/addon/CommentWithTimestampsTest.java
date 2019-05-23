@@ -20,8 +20,6 @@ package de.materne.doodle.api.addon;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.Test;
 
 import de.materne.doodle.api.Comment;
@@ -32,8 +30,7 @@ public class CommentWithTimestampsTest {
 	public void test() {
 		Comment cmt = new Comment("JUnit", null, "Even Comments could contain dates as 08.08. or 02.08.2018 or 03.08.2019.");
 		CommentWithTimestamps comment = new CommentWithTimestamps(cmt);
-		System.out.println(ToStringBuilder.reflectionToString(comment, ToStringStyle.MULTI_LINE_STYLE));
 		assertEquals(3, comment.getDates().size());
 	}
-
+	
 }
