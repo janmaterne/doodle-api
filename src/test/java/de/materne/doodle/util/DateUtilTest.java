@@ -74,6 +74,9 @@ public class DateUtilTest {
 		assertEquals(LocalDateTime.of(2017, 8, 1, 0, 0), DateUtil.parse("2017-08-01"));
 		assertEquals(LocalDateTime.of(2017, 8, 1, 0, 0), DateUtil.parse("01.08.2017", defaultProvider));
 		assertEquals(LocalDateTime.of(2020, 8, 1, 0, 0), DateUtil.parse("01.08.", defaultProvider));
+		assertEquals(LocalDateTime.of(2020, 8, 1, 0, 0), DateUtil.parse("01.8.", defaultProvider));
+		assertEquals(LocalDateTime.of(2020, 8, 1, 0, 0), DateUtil.parse("1.08.", defaultProvider));
+		assertEquals(LocalDateTime.of(2020, 8, 1, 0, 0), DateUtil.parse("1.8.", defaultProvider));
 		assertNull(DateUtil.parse(null));
 		assertNull(DateUtil.parse(""));
 		assertNull(DateUtil.parse("no-matched"));

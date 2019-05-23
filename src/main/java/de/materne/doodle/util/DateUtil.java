@@ -63,7 +63,7 @@ public final class DateUtil {
 			DateTimeFormatter.ISO_DATE,
 			DateTimeFormatter.ofPattern("dd.MM.yyyy"),
 			formatterWithDefaults("dd.MM.yyyy", defaultProvider, ChronoField.HOUR_OF_DAY, ChronoField.MINUTE_OF_HOUR, ChronoField.SECOND_OF_MINUTE),
-			formatterWithDefaults("dd.MM.", defaultProvider, ChronoField.YEAR)
+			formatterWithDefaults("d.M.", defaultProvider, ChronoField.YEAR)
 		);
 	}
 	
